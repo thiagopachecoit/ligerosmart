@@ -116,6 +116,7 @@ if ( $Self->{Subaction} eq 'GetModal' ) {
   my $chatGPTModel = $ModuleConfig->{ChatGPTModel} || 'gpt-3.5-turbo';
   my $chatGPTKey = $ModuleConfig->{ApiKey};
   my $chatGPTMaxTokens = 300 || $ModuleConfig->{ChatGPTMaxTokens};
+  my $chatGPTApiUrl = $ModuleConfig->{ApiUrl} || 'https://api.openai.com/v1/chat/completions';
   my $prompt = $ArticleData{Body};
 
     $Kernel::OM->Get('Kernel::System::Log')->Log(
@@ -133,7 +134,7 @@ if ( $Self->{Subaction} eq 'GetModal' ) {
       { 'role' => 'user', 'content' => $prompt },
   );
 
-  my $req = POST('https://api.openai.com/v1/chat/completions',
+  my $req = POST($chatGPTApiUrl,
       Content_Type => 'application/json',
       'Authorization' => "Bearer $chatGPTKey",
       Content => encode_json {
