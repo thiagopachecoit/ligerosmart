@@ -68,10 +68,10 @@ sub Run {
 	# change
 	# ------------------------------------------------------------ #
 
-  $Kernel::OM->Get('Kernel::System::Log')->Log(
-          Priority => 'error',
-          Message  => "Ticket ID: " . $Param{TicketID} . "\nArticle ID: " . $Articles[0]->{ArticleID} . "\n\n\n" . "Article Body: " . $ArticleData{Body} . "\n\n\n",
-      );
+#   $Kernel::OM->Get('Kernel::System::Log')->Log(
+#           Priority => 'error',
+#           Message  => "Ticket ID: " . $Param{TicketID} . "\nArticle ID: " . $Articles[0]->{ArticleID} . "\n\n\n" . "Article Body: " . $ArticleData{Body} . "\n\n\n",
+#       );
   
 my $JSON = $LayoutObject->JSONEncode(
       Data => {
@@ -79,12 +79,6 @@ my $JSON = $LayoutObject->JSONEncode(
       },
   );
 
-  # my $JSONResult = $LayoutObject->JSONEncode(
-  #     Data => {
-  #       #Quantity => '13'#,
-  #       OpenAI => $result
-  #     },
-  # );
 
 	if ( $Self->{Subaction} eq 'GetCounter' ) {
     return $LayoutObject->Attachment(
@@ -95,19 +89,13 @@ my $JSON = $LayoutObject->JSONEncode(
     );
 	}
 
-  # return $LayoutObject->Attachment(
-  #     ContentType => 'application/json; charset=utf8',
-  #     Content     => $JSONResult || '',
-  #     Type        => 'inline',
-  #     NoCache     => 1,
-  # );
 
 if ( $Self->{Subaction} eq 'GetModal' ) {
 
     
   my $ua = LWP::UserAgent->new;
   
-  my $LigeroFixModules = $Kernel::OM->Get('Kernel::Config')->Get('LigeroFix::Modules');
+  my $LigeroFixModules = $ConfigObject->Get('LigeroFix::Modules');
   my $ModuleConfig = $LigeroFixModules->{'061-LigeroSmartChatGPT'};
 
 
@@ -115,20 +103,16 @@ if ( $Self->{Subaction} eq 'GetModal' ) {
   my $chatGPTsystem = $ModuleConfig->{ChatGPTSystem} || 'Vocé é um robo que ajudará o atendente do LigeroSmart a identificar a solicitação ou problema do cliente de forma simplificada e direta limitando a menos de 250 palavras informando soluçoes por tópicos, respondendo em formato text/html';
   my $chatGPTModel = $ModuleConfig->{ChatGPTModel} || 'gpt-3.5-turbo';
   my $chatGPTKey = $ModuleConfig->{ApiKey};
-  my $chatGPTMaxTokens = 300 || $ModuleConfig->{ChatGPTMaxTokens};
+  my $chatGPTMaxTokens = $ModuleConfig->{ChatGPTMaxTokens} || 250;
   my $chatGPTApiUrl = $ModuleConfig->{ApiUrl} || 'https://api.openai.com/v1/chat/completions';
   my $prompt = $ArticleData{Body};
 
-    $Kernel::OM->Get('Kernel::System::Log')->Log(
-        Priority => 'error',
-        Message  => "ChatGPTModel: " . Dumper($ModuleConfig) . "\n\n\n" . $chatGPTModel . "\n" . $chatGPTKey . "\n" . $chatGPTsystem . "\n" . $chatGPTMaxTokens . "\n\n\n",
-    );
+    # $Kernel::OM->Get('Kernel::System::Log')->Log(
+    #     Priority => 'error',
+    #     Message  => "ChatGPTModel: " . Dumper($ModuleConfig) . "\n\n\n" . $chatGPTModel . "\n" . $chatGPTKey . "\n" . $chatGPTsystem . "\n" . $chatGPTMaxTokens . "\n\n\n",
+    # );
 
-
-
-
-  # my $chat_id = 'example-chat-id';
-
+  
   my @messages = (
       { 'role' => 'system', 'content' => $chatGPTsystem },
       { 'role' => 'user', 'content' => $prompt },
@@ -145,10 +129,10 @@ if ( $Self->{Subaction} eq 'GetModal' ) {
       }
   );
 
-    $Kernel::OM->Get('Kernel::System::Log')->Log(
-        Priority => 'error',
-        Message  => "ChatGPTModel: " . Dumper($req) . "\n\n\n",
-    );
+    # $Kernel::OM->Get('Kernel::System::Log')->Log(
+    #     Priority => 'error',
+    #     Message  => "ChatGPTModel: " . Dumper($req) . "\n\n\n",
+    # );
 
   my $res = $ua->request($req);
   my $result = "Passamos aqui";
@@ -156,10 +140,6 @@ if ( $Self->{Subaction} eq 'GetModal' ) {
   if ($res->is_success) {
       my $data = decode_json($res->content);
       $result = $data->{'choices'}[0]{'message'}{'content'} || "";
-  #     #print $data->{'choices'}[0]{'message'}{'content'} . "\n";
-  #     # print "prompt_tokens: " . $data->{'usage'}{'prompt_tokens'} . "\n";
-  #     # print "completion_tokens: " . $data->{'usage'}{'completion_tokens'} . "\n";
-  #     # print "total_tokens: " . $data->{'usage'}{'total_tokens'} . "\n";
   }
 
   else {
