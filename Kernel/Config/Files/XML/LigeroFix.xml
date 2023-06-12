@@ -228,6 +228,44 @@
             </Item>
         </Value>
     </Setting>
+    <Setting Name="LigeroFix::Modules###061-LigeroSmartChatGPT" Required="0" Valid="0">
+        <Description Translatable="1">ChatGPT Ligero Fix Module</Description>
+        <Navigation>LigeroFix::Modules</Navigation>
+        <Value>
+            <Hash>
+                <Item Key="Label">ChatGPT</Item>
+                <Item Key="BackgroundFontAwesomeIcon">fa-check</Item>
+                <Item Key="BackgroundColor">#0ebaaa</Item>
+                <Item Key="Module">AgentLigeroFixChatGPT</Item>
+                <Item Key="ApiKey">API_KEY</Item>
+                <Item Key="ApiUrl">https://api.openai.com/v1/chat/completions</Item>
+                <Item Key="ChatGPTModel">gpt-4</Item>
+                <Item Key="ChatGPTMaxTokens">300</Item>
+                <Item Key="ChatGPTSystem">Vocé é um robo que ajudará o atendente do LigeroSmart a identificar a solicitação ou problema do cliente de forma simplificada e direta limitando a menos de 250 palavras informando soluçoes por tópicos, respondendo em formato text/html</Item>
+            </Hash>
+        </Value>
+    </Setting>
+    <Setting Name="Frontend::Module###AgentLigeroFixChatGPT" Required="0" Valid="0">
+        <Description Translatable="1">Frontend module registration for the agent interface.</Description>
+        <Navigation>Frontend::Admin::ModuleRegistration</Navigation>
+        <Value>
+            <Item ValueType="FrontendRegistration">
+                <Hash>
+                    <Item Key="GroupRo">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Group">
+                        <Array>
+                        </Array>
+                    </Item>
+                    <Item Key="Description">AgentLigeroFixChatGPT</Item>
+                    <Item Key="Title">AgentLigeroFixChatGPT</Item>
+                    <Item Key="NavBarName">AgentLigeroFixChatGPT</Item>
+                </Hash>
+            </Item>
+        </Value>
+    </Setting>
     <Setting Name="Loader::Agent::CommonCSS###334-LigeroFix" Required="1" Valid="1">
         <Description Translatable="1">List of CSS files to always be loaded for the agent interface</Description>
         <Navigation>Frontend::Base</Navigation>
