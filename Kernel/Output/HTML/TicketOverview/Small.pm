@@ -1608,7 +1608,9 @@ sub Run {
 						$DataValue = $TimeObject->SystemTime2TimeStamp(
 							SystemTime => ( $Article{UntilTime} + $TimeObject->SystemTime() ),
 						);
-					}
+					} else {
+                            $DataValue = $TimeObject;
+                        };
                     if ( defined $Article{UntilTime} && $Article{UntilTime} < -1 ) {
                         $CSSClass = 'Warning';
                     }
